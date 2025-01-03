@@ -4,7 +4,7 @@
         <button class="btn btn-success">Voltar</button>
     </a>
 </section>
-    <h3 class="mt-3">Cadastrar vaga</h3>
+    <h3 class="mt-3">Cadastrar sua vaga</h3>
 
     <form method="POST">
         <div class="form-group">
