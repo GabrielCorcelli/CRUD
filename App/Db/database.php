@@ -24,15 +24,19 @@ class Database{
         $this->setConnection();
     }
 
-    private function setConnection(){
-        try{
-            $this->connection = new PDO('mysql:host='.self::HOST.';dbname='.self::NAME,self::USER,self::PASS);
+    private function setConnection() {
+        try {
+            $this->connection = new PDO(
+                'mysql:host=' . self::HOST . ';dbname=' . self::NAME, 
+                self::USER, 
+                self::PASS
+            );
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        }
-        catch(PDOException $e){
-            die('ERROR: '.$e->getMessage());
+        } catch (PDOException $e) {
+            die('ERROR: ' . $e->getMessage());
         }
     }
+    
 
     /**
      * Método responsável por executar as queries dentro do banco de dados
@@ -40,16 +44,16 @@ class Database{
      * @param array $params
      * @return PDOStatement
      */
-    public function execute($query, $params = []){
+    public function execute($query, $params = []) {
         try {
             $statement = $this->connection->prepare($query);
             $statement->execute($params);
-            return $statement;  // Retorna o statement com sucesso
+            return $statement;
         } catch (PDOException $e) {
-            error_log("Erro na execução da consulta: " . $e->getMessage(), 3, '/path/to/error_log.txt');
-            die('Erro ao executar a consulta.'); 
+            die('ERROR: ' . $e->getMessage());
         }
     }
+    
 
     /**
      * Método responsável por inserir dados no banco de dados
@@ -70,6 +74,34 @@ class Database{
 
         // Retorna o último ID inserido
         return $this->connection->lastInsertId();
+    }
+
+    public function select($where = null, $order = null, $limit = null, $fields = '*') {
+        $where = strlen($where) ? 'WHERE ' . $where : '';
+        $order = strlen($order) ? 'ORDER BY ' . $order : '';
+        $limit = strlen($limit) ? 'LIMIT ' . $limit : '';
+        $query = 'SELECT ' . $fields . ' FROM ' . $this->table . ' ' . $where . ' ' . $order . ' ' . $limit;
+        return $this->execute($query);
+    }
+
+    
+    
+    public function update($where,$values){
+
+        $fields= array_keys($values);
+        
+        $query = 'UPDATE '. $this->table.'  SET '.implode('=?,',$fields).'=? WHERE '.$where;
+        
+        $this->execute($query,array_values($values));
+    }
+
+    public function delete($where)
+    {
+        $query = 'DELETE FROM ' . $this->table . ' WHERE ' . $where;
+        ;
+
+        
+        $this->execute($query);
     }
 }
 ?>
