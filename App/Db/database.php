@@ -66,9 +66,9 @@ class Database{
         $fields = array_keys($values);   // Obtém as chaves do array (nomes das colunas)
         $binds = array_pad([], count($fields), '?');  // Cria os binds (?, ?, ...)
 
-        // Prepara a query de inserção
+        
         $query = 'INSERT INTO ' . $this->table . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $binds) . ')';
-
+        
         // Executa a query passando os valores
         $this->execute($query, array_values($values)); 
 

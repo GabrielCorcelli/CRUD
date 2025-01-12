@@ -36,18 +36,20 @@ class Vaga{
 
     
 
-
+   
     public function cadastrar(){
-        //DEFINIR A DATA
-        $this->data=date('Y-m-d H:i:s');
-        //INSERIR A VAGA NO BANCO
-        $obDatabase= new Database('vagas');
-       $this->id= $obDatabase->insert([
-            'titulo' => $this->titulo,
-            'descricao' => $this->descricao,
-            'ativo' => $this->ativo,
-            'data' => $this->data
-        ]);
+        if(isset($this->titulo) && isset($this->descricao) && isset($this->ativo)){
+            $this->data=date('Y-m-d H:i:s');
+            //INSERIR A VAGA NO BANCO
+            $obDatabase= new Database('vagas');
+           $this->id= $obDatabase->insert([
+                'titulo' => $this->titulo,
+                'descricao' => $this->descricao,
+                'ativo' => $this->ativo,
+                'data' => $this->data
+            ]);
+        }
+        
 
    
 
